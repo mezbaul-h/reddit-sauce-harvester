@@ -4,17 +4,11 @@ check: ## Check source code issues
 	bandit --recursive . --configfile pyproject.toml
 	find . -iname "*.py" -not -path "./venv/*" | xargs pylint
 
-deps: ## Install dependencies
-	pip install -r requirements.txt
-
 fmt: ## Format code
 	black .
 	isort --atomic .
 
-collectstatic:
-	@python manage.py collectstatic --noinput
-
-test: collectstatic ## Run tests
+test: ## Run tests
 	@coverage run --source="." manage.py test
 	@coverage report
 

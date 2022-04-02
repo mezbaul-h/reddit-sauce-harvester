@@ -3,6 +3,7 @@ import timeit
 from typing import Any, List, Optional, Tuple
 from urllib.parse import urlparse
 
+from .meta import SortChoice
 from .reddit_api import RedditDesktopAPI
 from .utils import deep_get
 
@@ -11,9 +12,9 @@ Item = Tuple[str, List[str]]
 
 class HarvesterConfig:
     def __init__(self, **kwargs: Any):
-        self.delay: Optional[int] = kwargs.get("delay")
+        self.delay: Optional[float] = kwargs.get("delay")
         self.when_to_stop: Optional[str] = kwargs.get("when_to_stop")
-        self.sort: str = kwargs.get("sort")
+        self.sort: SortChoice = kwargs.get("sort")
         self.include_domains: Optional[List[str]] = kwargs.get("include_domains")
         self.exclude_domains: Optional[List[str]] = kwargs.get("exclude_domains")
 
@@ -56,21 +57,24 @@ class Harvester:
     def is_valid_source(self, source: str) -> bool:
         parsed_url_obj = urlparse(source)
         domain = parsed_url_obj.hostname or self.DOMAIN
+        alt_domain = domain.lstrip("www.") if domain.startswith("www.") else f"www.{domain}"
+        domains = [domain, alt_domain]
 
         if self.config.include_domains is not None:
-            return domain in self.config.include_domains
+            return any((item in self.config.include_domains for item in domains))
 
         if self.config.exclude_domains is not None:
-            return domain not in self.config.exclude_domains
+            return any((item not in self.config.exclude_domains for item in domains))
 
         return True
 
     def get_sources(self, post_id: str) -> List[str]:
-        items = self.api.get_post_comments(self.subreddit_name, post_id)
+        items = self.api.get_post_comments(post_id)
         sources = {}  # Use dict vs list for O(1) lookup
 
         for item in items:
             paragraphs = deep_get(item, "media.richtextContent.document", default=[])
+
             while paragraphs:
                 paragraph = paragraphs.pop()
                 paragraph_type = paragraph.get("e")
@@ -106,7 +110,7 @@ class Harvester:
         token = None
 
         while has_more and self.should_continue(items):
-            posts, token = self.api.get_subreddit_posts(self.subreddit_name, token=token)
+            posts, token = self.api.get_subreddit_posts(self.subreddit_name, token=token, sort=self.config.sort)
             has_more = token is not None
 
             for post in posts:
@@ -121,10 +125,6 @@ class Harvester:
                     print(f"[{len(items)}] {post['title']}: {sources}")
 
             self.apply_delay()
-
-    @staticmethod
-    def log_info(letter: str, total: int, current: int):
-        print(f"[{letter}] Harvested {current}/{total} items")
 
     def run(self):
         self.iterate_posts()

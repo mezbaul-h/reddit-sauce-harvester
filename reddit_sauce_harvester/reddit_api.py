@@ -1,9 +1,15 @@
 import requests
 
+from reddit_sauce_harvester.meta import SORT_TOP_CHOICES, SortChoice
+
 
 class RedditDesktopAPI:
     SUBREDDIT_URL_BASE = "https://gateway.reddit.com/desktopapi/v1/subreddits"
     COMMENT_URL_BASE = "https://gateway.reddit.com/desktopapi/v1/postcomments"
+    _COMMON_PARAMS = {
+        "allow_over18": 1,
+        "rtj": "only",
+    }
 
     def __init__(self):
         self.session = requests.Session()
@@ -14,48 +20,49 @@ class RedditDesktopAPI:
             ),
         }
 
-    def get_post_comments(self, subreddit_name: str, post_id: str):
+    def get_post_comments(self, post_id: str):
         response = self.session.get(
             f"{self.COMMENT_URL_BASE}/{post_id}",
-            params={
-                "rtj": "only",
-                "emotes_as_images": True,
-                "redditWebClient": "web2x",
-                "app": "web2x-client-production",
-                "profile_img": True,
-                "allow_over18": 1,
-                "include": "",
-                "subredditName": subreddit_name,
-                "hasSortParam": False,
-                "include_categories": True,
-                "onOtherDiscussions": False,
-            },
+            params=self._COMMON_PARAMS,
         )
         response.raise_for_status()
+
         return response.json()["comments"].values()
 
-    def get_subreddit_posts(self, subreddit_name: str, token: str = None, sort: str = None):
+    def get_subreddit_posts(self, subreddit_name: str, token: str = None, sort: SortChoice = None):
         sort_query_params = {}
 
-        if sort == "hot":
+        if sort == SortChoice.HOT:
             sort_query_params["sort"] = "hot"
-        elif sort == "top":
+        elif sort == SortChoice.NEW:
+            sort_query_params["sort"] = "new"
+        elif sort == SortChoice.RISING:
+            sort_query_params["sort"] = "rising"
+        elif sort in SORT_TOP_CHOICES:
             sort_query_params["sort"] = "top"
-            sort_query_params["t"] = "all"
+
+            if sort == SortChoice.TOP_ALL_TIME:
+                sort_query_params["t"] = "all"
+            elif sort == SortChoice.TOP_HOUR:
+                sort_query_params["t"] = "hour"
+            elif sort == SortChoice.TOP_DAY:
+                sort_query_params["t"] = "day"
+            elif sort == SortChoice.TOP_WEEK:
+                sort_query_params["t"] = "week"
+            elif sort == SortChoice.TOP_MONTH:
+                sort_query_params["t"] = "month"
+            elif sort == SortChoice.TOP_YEAR:
+                sort_query_params["t"] = "year"
 
         response = self.session.get(
             f"{self.SUBREDDIT_URL_BASE}/{subreddit_name}",
             params={
-                "rtj": "only",
-                "redditWebClient": "web2x",
-                "app": "web2x-client-production",
-                "allow_over18": 1,
-                "include": "",
-                "layout": "classic",
                 "after": token,
                 **sort_query_params,
+                **self._COMMON_PARAMS,
             },
         )
         response.raise_for_status()
         response_data = response.json()
+
         return response_data["posts"].values(), response_data["token"]
