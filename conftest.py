@@ -1,5 +1,4 @@
 import itertools
-from test.common import POST_DATA, SUBREDDIT_NAME, TOKEN
 from typing import Generator
 
 import pytest
@@ -8,6 +7,7 @@ from responses import matchers
 
 from reddit_sauce_harvester.meta import SortChoice
 from reddit_sauce_harvester.reddit_api import RedditDesktopAPI
+from test.common import POST_DATA, SUBREDDIT_NAME, TOKEN
 
 
 @pytest.fixture
