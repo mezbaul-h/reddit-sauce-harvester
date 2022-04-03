@@ -10,7 +10,6 @@ from ..meta import SortChoice
 
 @click.command()
 @click.version_option(__version__, "-v", "--version")
-@click.option("-w", "--when-to-stop", default=None, help="When to stop.")
 @click.option("-d", "--delay", default=None, help="Delay between requests in seconds.", type=float)
 @click.option(
     "-s",
@@ -36,7 +35,6 @@ from ..meta import SortChoice
 @click.argument("subreddit")
 def main(**kwargs: Any) -> int:
     config = HarvesterConfig(
-        when_to_stop=kwargs.get("when_to_stop"),
         delay=kwargs.get("delay"),
         sort=kwargs.get("sort"),
         include_domains=kwargs.get("include_domains"),

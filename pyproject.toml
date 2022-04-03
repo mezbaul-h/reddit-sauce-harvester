@@ -6,9 +6,7 @@ requires = [
 build-backend = "setuptools.build_meta"
 
 [tool.bandit]
-exclude_dirs = [
-    "venv",
-]
+exclude_dirs = ["venv"]
 skips = ["B101"]
 
 [tool.black]
@@ -20,3 +18,15 @@ profile = "black"
 multi_line_output = 3
 py_version = 39
 line_length = 119
+
+[tool.pytest.ini_options]
+addopts = "-ra --verbose"
+testpaths = ["test"]
+
+[tool.coverage.run]
+branch = true
+source = ["reddit_sauce_harvester"]
+
+[tool.coverage.report]
+show_missing = true
+exclude_lines = ["if __name__ == .__main__.:"]

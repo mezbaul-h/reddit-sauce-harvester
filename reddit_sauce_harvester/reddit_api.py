@@ -1,12 +1,14 @@
+from typing import Optional
+
 import requests
 
-from reddit_sauce_harvester.meta import SORT_TOP_CHOICES, SortChoice
+from reddit_sauce_harvester.meta import SortChoice
 
 
 class RedditDesktopAPI:
     SUBREDDIT_URL_BASE = "https://gateway.reddit.com/desktopapi/v1/subreddits"
     COMMENT_URL_BASE = "https://gateway.reddit.com/desktopapi/v1/postcomments"
-    _COMMON_PARAMS = {
+    COMMON_QUERY_PARAMS = {
         "allow_over18": 1,
         "rtj": "only",
     }
@@ -23,13 +25,13 @@ class RedditDesktopAPI:
     def get_post_comments(self, post_id: str):
         response = self.session.get(
             f"{self.COMMENT_URL_BASE}/{post_id}",
-            params=self._COMMON_PARAMS,
+            params=self.COMMON_QUERY_PARAMS,
         )
         response.raise_for_status()
 
         return response.json()["comments"].values()
 
-    def get_subreddit_posts(self, subreddit_name: str, token: str = None, sort: SortChoice = None):
+    def get_subreddit_posts(self, subreddit_name: str, token: Optional[str], sort: SortChoice):
         sort_query_params = {}
 
         if sort == SortChoice.HOT:
@@ -38,7 +40,7 @@ class RedditDesktopAPI:
             sort_query_params["sort"] = "new"
         elif sort == SortChoice.RISING:
             sort_query_params["sort"] = "rising"
-        elif sort in SORT_TOP_CHOICES:
+        else:  # elif sort in SORT_TOP_CHOICES:
             sort_query_params["sort"] = "top"
 
             if sort == SortChoice.TOP_ALL_TIME:
@@ -51,7 +53,7 @@ class RedditDesktopAPI:
                 sort_query_params["t"] = "week"
             elif sort == SortChoice.TOP_MONTH:
                 sort_query_params["t"] = "month"
-            elif sort == SortChoice.TOP_YEAR:
+            else:  # elif sort == SortChoice.TOP_YEAR:
                 sort_query_params["t"] = "year"
 
         response = self.session.get(
@@ -59,7 +61,7 @@ class RedditDesktopAPI:
             params={
                 "after": token,
                 **sort_query_params,
-                **self._COMMON_PARAMS,
+                **self.COMMON_QUERY_PARAMS,
             },
         )
         response.raise_for_status()

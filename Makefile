@@ -1,3 +1,5 @@
+.PHONY: test
+
 check: ## Check source code issues
 	black --diff --check .
 	isort --diff --check .
@@ -9,8 +11,9 @@ fmt: ## Format code
 	isort --atomic .
 
 test: ## Run tests
-	@coverage run --source="." manage.py test
-	@coverage report
+	coverage run --module pytest
+	coverage report
+	coverage html
 
 help: ## Show this help
 	@echo 'Usage: make [target]'
