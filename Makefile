@@ -1,21 +1,20 @@
 .PHONY: test
 
-check: ## Check source code issues
+check: ## Check source code issues.
 	black --diff --check .
 	isort --diff --check .
 	bandit --recursive . --configfile pyproject.toml
 	find . -iname "*.py" -not -path "./venv/*" | xargs pylint
 
-fmt: ## Format code
+fmt: ## Format code.
 	black .
 	isort --atomic .
 
-test: ## Run tests
+test: ## Run tests.
 	coverage run --module pytest
 	coverage report
-	coverage html
 
-help: ## Show this help
+help: ## Show this help.
 	@echo 'Usage: make [target]'
 	@echo ''
 	@echo 'Targets:'

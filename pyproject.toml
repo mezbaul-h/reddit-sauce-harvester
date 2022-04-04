@@ -18,7 +18,6 @@ profile = "black"
 multi_line_output = 3
 py_version = 39
 line_length = 119
-known_first_party = ["reddit_sauce_harvester", "test"]
 
 [tool.pytest.ini_options]
 addopts = "-ra --verbose"
@@ -26,6 +25,7 @@ testpaths = ["test"]
 
 [tool.coverage.run]
 branch = true
+omit = ["reddit_sauce_harvester/__main__.py"]
 source = ["reddit_sauce_harvester"]
 
 [tool.coverage.report]

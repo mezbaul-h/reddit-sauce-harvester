@@ -34,6 +34,10 @@ class Harvester:
     def __exit__(self, exc_type, exc_val, exc_tb) -> None:
         self.api.session.close()
 
+    @property
+    def items(self) -> List[Item]:
+        return self._items
+
     def is_valid_source(self, source: str) -> bool:
         parsed_url_obj = urlparse(source)
         domain = parsed_url_obj.hostname or self.DOMAIN
@@ -44,7 +48,7 @@ class Harvester:
             return any((item in self.config.include_domains for item in domains))
 
         if self.config.exclude_domains is not None:
-            return any((item not in self.config.exclude_domains for item in domains))
+            return all((item not in self.config.exclude_domains for item in domains))
 
         return True
 
