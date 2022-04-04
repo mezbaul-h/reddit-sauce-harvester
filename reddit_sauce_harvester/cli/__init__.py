@@ -2,10 +2,13 @@ from typing import Any
 
 import click
 from click_params import DomainListParamType
+from colorama import init
 
 from .. import __version__
 from ..harvester import Harvester, HarvesterConfig
 from ..meta import SortChoice
+
+init()
 
 
 @click.command()
