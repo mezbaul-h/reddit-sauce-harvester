@@ -12,7 +12,7 @@ fmt: ## Format code.
 
 test: ## Run tests.
 	coverage run --module pytest
-	coverage report
+	coverage xml
 
 help: ## Show this help.
 	@echo 'Usage: make [target]'
