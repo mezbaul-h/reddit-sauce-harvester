@@ -90,7 +90,7 @@ class Harvester:
 
                 if sources:
                     self._items.append((post, sources))
-                    print(post['title'])
+                    print(post["title"])
 
                     for source in sources:
                         print(f"└── {source}")
