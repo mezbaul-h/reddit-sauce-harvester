@@ -3,8 +3,6 @@ import timeit
 from typing import Any, List, Optional, Tuple
 from urllib.parse import urlparse
 
-from colorama import Fore
-
 from .meta import SortChoice
 from .reddit_api import RedditDesktopAPI
 from .utils import deep_get
@@ -92,10 +90,10 @@ class Harvester:
 
                 if sources:
                     self._items.append((post, sources))
-                    print(f"{Fore.LIGHTMAGENTA_EX}{post['title']}{Fore.RESET}")
+                    print(post['title'])
 
                     for source in sources:
-                        print(f"    {Fore.BLUE}{source}{Fore.RESET}")
+                        print(f"└── {source}")
 
             self.apply_delay()
 
