@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Any, Dict, List, Optional
 
 import requests
 
@@ -13,7 +13,7 @@ class RedditDesktopAPI:
         "rtj": "only",
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.session = requests.Session()
         self.session.headers = {
             "User-Agent": (
@@ -22,7 +22,7 @@ class RedditDesktopAPI:
             ),
         }
 
-    def get_post_comments(self, post_id: str):
+    def get_post_comments(self, post_id: str) -> List[Dict[str, Any]]:
         response = self.session.get(
             f"{self.COMMENT_URL_BASE}/{post_id}",
             params=self.COMMON_QUERY_PARAMS,

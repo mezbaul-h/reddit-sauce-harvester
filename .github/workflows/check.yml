@@ -3,7 +3,7 @@ name: source code checks
 on: [push, pull_request]
 
 jobs:
-  test:
+  check:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Setup python (${{ matrix.python-version }})
+      - name: Setup python (${{ matrix.os }}, ${{ matrix.python-version }})
         uses: actions/setup-python@v3
         with:
           python-version: ${{ matrix.python-version }}
