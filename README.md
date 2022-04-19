@@ -31,10 +31,9 @@ rsharvester [OPTIONS] SUBREDDIT
 -d, --delay FLOAT               Delay between requests in seconds.
 -s, --sort [hot|new|rising|top_all|top_hour|top_day|top_week|top_month|top_year]
                                 Sort order of subreddit posts.
--i, --include-domains DOMAIN NAME LIST
-                                Comma separated list of allowed domains (has
-                                precedence over --exclude-domains).
--x, --exclude-domains DOMAIN NAME LIST
-                                Comma separated list of excluded domains.
+-u, --url-patterns TEXT         Only match provided url pattern(s) (has
+                                precedence over --exclude-url-patterns).
+-x, --exclude-url-patterns TEXT
+                                Exclude provided url pattern(s).
 --help                          Show this message and exit.
 ```

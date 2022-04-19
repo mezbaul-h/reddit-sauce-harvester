@@ -1,3 +1,4 @@
+import re
 from typing import Generator, List, Optional
 
 import pytest
@@ -11,30 +12,29 @@ DOMAIN_COMBINATIONS = [None, [DOMAIN_A], [DOMAIN_A, DOMAIN_B_WWW], [DOMAIN_A_WWW
 
 
 @pytest.mark.parametrize("sort", list(SortChoice))
-@pytest.mark.parametrize("include_domains", DOMAIN_COMBINATIONS)
-@pytest.mark.parametrize("exclude_domains", DOMAIN_COMBINATIONS)
+@pytest.mark.parametrize("url_patterns", DOMAIN_COMBINATIONS)
+@pytest.mark.parametrize("exclude_url_patterns", DOMAIN_COMBINATIONS)
 def test_harvester(
     sort: SortChoice,
-    include_domains: Optional[List[str]],
-    exclude_domains: Optional[List[str]],
+    url_patterns: Optional[List[str]],
+    exclude_url_patterns: Optional[List[str]],
     register_mock_requests: Generator,  # pylint: disable=unused-argument
 ) -> None:
     config = HarvesterConfig(
         delay=None,
         sort=sort,
-        include_domains=include_domains,
-        exclude_domains=exclude_domains,
+        url_patterns=url_patterns,
+        exclude_url_patterns=exclude_url_patterns,
     )
     with Harvester(SUBREDDIT_NAME, config=config) as harvester:
         harvester.run()
         items = harvester.items
-        sources = [source.replace("www.", "") for item in items for source in item[1]]
 
-        for source in sources:
-            if include_domains is not None:
-                assert any((item.lstrip("www.") in source for item in include_domains))
-            elif exclude_domains is not None:
-                assert all((item.lstrip("www.") not in source for item in exclude_domains))
+        for item in [source for item in items for source in item[1]]:
+            if url_patterns is not None:
+                assert any((re.match(pattern, item) for pattern in url_patterns))
+            elif exclude_url_patterns is not None:
+                assert all((re.match(pattern, item) for pattern in exclude_url_patterns))
 
 
 @pytest.mark.parametrize("delay", [0.5, 1])

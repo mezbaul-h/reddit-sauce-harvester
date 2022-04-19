@@ -4,7 +4,7 @@ check: ## Check source code issues.
 	black --diff --check .
 	isort --diff --check .
 	bandit --recursive . --configfile pyproject.toml
-	find . -iname "*.py" -not -path "./venv/*" | xargs pylint
+	find . -iname "*.py" -not -path "./venv/*" -not -path "./build/*" | xargs pylint
 
 fmt: ## Format code.
 	black .

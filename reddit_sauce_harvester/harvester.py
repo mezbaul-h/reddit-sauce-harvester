@@ -1,7 +1,7 @@
+import re
 import time
 import timeit
 from typing import Any, List, Optional, Tuple
-from urllib.parse import urlparse
 
 from .meta import SortChoice
 from .reddit_api import RedditDesktopAPI
@@ -14,8 +14,8 @@ class HarvesterConfig:
     def __init__(self, **kwargs: Any) -> None:
         self.delay: Optional[float] = kwargs.get("delay")
         self.sort: SortChoice = kwargs.get("sort")
-        self.include_domains: Optional[List[str]] = kwargs.get("include_domains")
-        self.exclude_domains: Optional[List[str]] = kwargs.get("exclude_domains")
+        self.url_patterns: Optional[List[str]] = kwargs.get("url_patterns")
+        self.exclude_url_patterns: Optional[List[str]] = kwargs.get("exclude_url_patterns")
 
 
 class Harvester:
@@ -39,16 +39,11 @@ class Harvester:
         return self._items
 
     def is_valid_source(self, source: str) -> bool:
-        parsed_url_obj = urlparse(source)
-        domain = parsed_url_obj.hostname or self.DOMAIN
-        alt_domain = domain.lstrip("www.") if domain.startswith("www.") else f"www.{domain}"
-        domains = [domain, alt_domain]
+        if self.config.url_patterns is not None:
+            return any((re.match(pattern, source) for pattern in self.config.url_patterns))
 
-        if self.config.include_domains is not None:
-            return any((item in self.config.include_domains for item in domains))
-
-        if self.config.exclude_domains is not None:
-            return all((item not in self.config.exclude_domains for item in domains))
+        if self.config.exclude_url_patterns is not None:
+            return all((re.match(pattern, source) for pattern in self.config.exclude_url_patterns))
 
         return True
 

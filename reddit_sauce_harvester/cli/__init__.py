@@ -1,7 +1,6 @@
 from typing import Any
 
 import click
-from click_params import DomainListParamType
 
 from .. import __version__
 from ..harvester import Harvester, HarvesterConfig
@@ -19,26 +18,26 @@ from ..meta import SortChoice
     type=click.Choice(SortChoice),
 )
 @click.option(
-    "-i",
-    "--include-domains",
+    "-u",
+    "--url-patterns",
     default=None,
-    type=DomainListParamType(),
-    help="Comma separated list of allowed domains (has precedence over --exclude-domains).",
+    multiple=True,
+    help="Only match provided url pattern(s) (has precedence over --exclude-url-patterns).",
 )
 @click.option(
     "-x",
-    "--exclude-domains",
+    "--exclude-url-patterns",
     default=None,
-    type=DomainListParamType(),
-    help="Comma separated list of excluded domains.",
+    multiple=True,
+    help="Exclude provided url pattern(s).",
 )
 @click.argument("subreddit")
 def main(**kwargs: Any) -> int:
     config = HarvesterConfig(
         delay=kwargs.get("delay"),
         sort=kwargs.get("sort"),
-        include_domains=kwargs.get("include_domains"),
-        exclude_domains=kwargs.get("exclude_domains"),
+        url_patterns=kwargs.get("url_patterns"),
+        exclude_url_patterns=kwargs.get("exclude_url_patterns"),
     )
 
     with Harvester(kwargs.get("subreddit"), config) as harvester:
