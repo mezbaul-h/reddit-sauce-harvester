@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class SortChoice(str, Enum):
+class SortChoice(Enum):
     HOT = "hot"
     NEW = "new"
     RISING = "rising"
@@ -13,4 +13,4 @@ class SortChoice(str, Enum):
     TOP_YEAR = "top_year"
 
 
-SORT_TOP_CHOICES = [choice for choice in SortChoice if choice.startswith("top_")]
+SORT_TOP_CHOICES = [choice for choice in SortChoice if choice.value.startswith("top_")]

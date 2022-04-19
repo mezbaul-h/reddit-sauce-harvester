@@ -1,5 +1,5 @@
 import re
-from typing import Generator, List, Optional
+from typing import Generator, Tuple
 
 import pytest
 
@@ -8,7 +8,7 @@ from reddit_sauce_harvester.meta import SortChoice
 
 from .common import DOMAIN_A, DOMAIN_A_WWW, DOMAIN_B, DOMAIN_B_WWW, SUBREDDIT_NAME
 
-DOMAIN_COMBINATIONS = [None, [DOMAIN_A], [DOMAIN_A, DOMAIN_B_WWW], [DOMAIN_A_WWW, DOMAIN_B]]
+DOMAIN_COMBINATIONS = [[DOMAIN_A], [DOMAIN_A, DOMAIN_B_WWW], [DOMAIN_A_WWW, DOMAIN_B]]
 
 
 @pytest.mark.parametrize("sort", list(SortChoice))
@@ -16,8 +16,8 @@ DOMAIN_COMBINATIONS = [None, [DOMAIN_A], [DOMAIN_A, DOMAIN_B_WWW], [DOMAIN_A_WWW
 @pytest.mark.parametrize("exclude_url_patterns", DOMAIN_COMBINATIONS)
 def test_harvester(
     sort: SortChoice,
-    url_patterns: Optional[List[str]],
-    exclude_url_patterns: Optional[List[str]],
+    url_patterns: Tuple[str],
+    exclude_url_patterns: Tuple[str],
     register_mock_requests: Generator,  # pylint: disable=unused-argument
 ) -> None:
     config = HarvesterConfig(

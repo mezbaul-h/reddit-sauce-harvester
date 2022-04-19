@@ -13,21 +13,19 @@ from ..meta import SortChoice
 @click.option(
     "-s",
     "--sort",
-    default=SortChoice.HOT,
+    default=SortChoice.HOT.value,
     help="Sort order of subreddit posts.",
-    type=click.Choice(SortChoice),
+    type=click.Choice([choice.value for choice in SortChoice]),
 )
 @click.option(
     "-u",
     "--url-patterns",
-    default=None,
     multiple=True,
     help="Only match provided url pattern(s) (has precedence over --exclude-url-patterns).",
 )
 @click.option(
     "-x",
     "--exclude-url-patterns",
-    default=None,
     multiple=True,
     help="Exclude provided url pattern(s).",
 )

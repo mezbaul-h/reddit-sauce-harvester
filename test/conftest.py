@@ -17,6 +17,7 @@ def register_mock_requests() -> Generator:
             match_params = {
                 **RedditDesktopAPI.COMMON_QUERY_PARAMS,
             }
+            sort = sort.value
 
             if sort.startswith("top_"):
                 match_params["sort"] = "top"

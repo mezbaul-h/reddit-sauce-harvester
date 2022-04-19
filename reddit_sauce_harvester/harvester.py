@@ -13,9 +13,9 @@ Item = Tuple[str, List[str]]
 class HarvesterConfig:
     def __init__(self, **kwargs: Any) -> None:
         self.delay: Optional[float] = kwargs.get("delay")
-        self.sort: SortChoice = kwargs.get("sort")
-        self.url_patterns: Optional[List[str]] = kwargs.get("url_patterns")
-        self.exclude_url_patterns: Optional[List[str]] = kwargs.get("exclude_url_patterns")
+        self.sort: SortChoice = SortChoice(kwargs.get("sort"))
+        self.url_patterns: Tuple[str] = kwargs.get("url_patterns")
+        self.exclude_url_patterns: Tuple[str] = kwargs.get("exclude_url_patterns")
 
 
 class Harvester:
@@ -39,10 +39,10 @@ class Harvester:
         return self._items
 
     def is_valid_source(self, source: str) -> bool:
-        if self.config.url_patterns is not None:
+        if self.config.url_patterns:
             return any((re.match(pattern, source) for pattern in self.config.url_patterns))
 
-        if self.config.exclude_url_patterns is not None:
+        if self.config.exclude_url_patterns:
             return all((re.match(pattern, source) for pattern in self.config.exclude_url_patterns))
 
         return True
