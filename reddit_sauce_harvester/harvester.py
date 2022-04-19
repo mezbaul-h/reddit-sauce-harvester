@@ -40,10 +40,10 @@ class Harvester:
 
     def is_valid_source(self, source: str) -> bool:
         if self.config.url_patterns:
-            return any((re.match(pattern, source) for pattern in self.config.url_patterns))
+            return any((re.search(pattern, source) for pattern in self.config.url_patterns))
 
         if self.config.exclude_url_patterns:
-            return all((re.match(pattern, source) for pattern in self.config.exclude_url_patterns))
+            return all((re.search(pattern, source) for pattern in self.config.exclude_url_patterns))
 
         return True
 

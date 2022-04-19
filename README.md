@@ -31,9 +31,9 @@ rsharvester [OPTIONS] SUBREDDIT
 -d, --delay FLOAT               Delay between requests in seconds.
 -s, --sort [hot|new|rising|top_all|top_hour|top_day|top_week|top_month|top_year]
                                 Sort order of subreddit posts.
--u, --url-patterns TEXT         Only match provided url pattern(s) (has
-                                precedence over --exclude-url-patterns).
--x, --exclude-url-patterns TEXT
+-u, --url-pattern TEXT          Only match provided url pattern(s) (has
+                                precedence over --exclude-url-pattern).
+-x, --exclude-url-pattern TEXT
                                 Exclude provided url pattern(s).
 --help                          Show this message and exit.
 ```

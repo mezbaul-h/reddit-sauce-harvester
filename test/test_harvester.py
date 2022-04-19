@@ -32,9 +32,9 @@ def test_harvester(
 
         for item in [source for item in items for source in item[1]]:
             if url_patterns is not None:
-                assert any((re.match(pattern, item) for pattern in url_patterns))
+                assert any((re.search(pattern, item) for pattern in url_patterns))
             elif exclude_url_patterns is not None:
-                assert all((re.match(pattern, item) for pattern in exclude_url_patterns))
+                assert all((re.search(pattern, item) for pattern in exclude_url_patterns))
 
 
 @pytest.mark.parametrize("delay", [0.5, 1])

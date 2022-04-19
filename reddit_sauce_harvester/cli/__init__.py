@@ -19,13 +19,13 @@ from ..meta import SortChoice
 )
 @click.option(
     "-u",
-    "--url-patterns",
+    "--url-pattern",
     multiple=True,
-    help="Only match provided url pattern(s) (has precedence over --exclude-url-patterns).",
+    help="Only match provided url pattern(s) (has precedence over --exclude-url-pattern).",
 )
 @click.option(
     "-x",
-    "--exclude-url-patterns",
+    "--exclude-url-pattern",
     multiple=True,
     help="Exclude provided url pattern(s).",
 )
@@ -34,8 +34,8 @@ def main(**kwargs: Any) -> int:
     config = HarvesterConfig(
         delay=kwargs.get("delay"),
         sort=kwargs.get("sort"),
-        url_patterns=kwargs.get("url_patterns"),
-        exclude_url_patterns=kwargs.get("exclude_url_patterns"),
+        url_patterns=kwargs.get("url_pattern"),
+        exclude_url_patterns=kwargs.get("exclude_url_pattern"),
     )
 
     with Harvester(kwargs.get("subreddit"), config) as harvester:
