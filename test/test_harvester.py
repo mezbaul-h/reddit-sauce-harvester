@@ -8,7 +8,7 @@ from reddit_sauce_harvester.meta import SortChoice
 
 from .common import DOMAIN_A, DOMAIN_A_WWW, DOMAIN_B, DOMAIN_B_WWW, SUBREDDIT_NAME
 
-DOMAIN_COMBINATIONS = [[DOMAIN_A], [DOMAIN_A, DOMAIN_B_WWW], [DOMAIN_A_WWW, DOMAIN_B]]
+DOMAIN_COMBINATIONS = [(), (DOMAIN_A,), (DOMAIN_A, DOMAIN_B_WWW), (DOMAIN_A_WWW, DOMAIN_B)]
 
 
 @pytest.mark.parametrize("sort", list(SortChoice))
@@ -31,9 +31,9 @@ def test_harvester(
         items = harvester.items
 
         for item in [source for item in items for source in item[1]]:
-            if url_patterns is not None:
+            if url_patterns:
                 assert any((re.search(pattern, item) for pattern in url_patterns))
-            elif exclude_url_patterns is not None:
+            elif exclude_url_patterns:
                 assert all((re.search(pattern, item) for pattern in exclude_url_patterns))
 
 

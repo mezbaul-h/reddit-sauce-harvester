@@ -78,12 +78,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python scripts/gh_release.py
-      - name: Build a binary wheel and a source tarball
-        run: python -m build --sdist --wheel
-      - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          user: __token__
-          password: ${{ secrets.PYPI_API_TOKEN }}
-          skip_existing: true
-          verbose: true

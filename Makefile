@@ -12,6 +12,7 @@ fmt: ## Format code.
 
 test: ## Run tests.
 	coverage run --module pytest
+	coverage html
 	coverage xml
 
 help: ## Show this help.
