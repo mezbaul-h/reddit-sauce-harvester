@@ -1,8 +1,8 @@
 # reddit-sauce-harvester
 
-[![ci](https://github.com/mehq/reddit-sauce-harvester/workflows/ci/badge.svg?branch=master)](https://github.com/mehq/reddit-sauce-harvester/actions/workflows/ci.yml)
-[![codecov](https://codecov.io/gh/mehq/reddit-sauce-harvester/branch/master/graph/badge.svg)](https://codecov.io/gh/mehq/reddit-sauce-harvester)
-[![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](https://github.com/mehq/reddit-sauce-harvester/blob/master/LICENSE.txt)
+[![ci](https://github.com/mzbaul/reddit-sauce-harvester/workflows/ci/badge.svg?branch=master)](https://github.com/mzbaul/reddit-sauce-harvester/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/mzbaul/reddit-sauce-harvester/branch/master/graph/badge.svg)](https://codecov.io/gh/mzbaul/reddit-sauce-harvester)
+[![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](https://github.com/mzbaul/reddit-sauce-harvester/blob/master/LICENSE.txt)
 
 A command program tool to harvest links (sauces) from reddit post comments.
 
@@ -14,7 +14,7 @@ pip install reddit-sauce-harvester
 
 ### From Source
 ```bash
-git clone https://github.com/mehq/reddit-sauce-harvester.git
+git clone https://github.com/mzbaul/reddit-sauce-harvester.git
 cd reddit-sauce-harvester
 python setup.py install
 ```
